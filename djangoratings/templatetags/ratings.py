@@ -26,8 +26,8 @@ class RatingByRequestNode(template.Node):
             return ''
         try:
             ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META['REMOTE_ADDR']
-            if isinstance(ip, list):
-                ip = ip[0]
+            if len(ip.split(",")) > 1:
+                ip = ip.split(",")[0]
             vote = field.get_rating_for_user(request.user, ip, request.COOKIES)
             context[self.context_var] = vote
         except ObjectDoesNotExist:
