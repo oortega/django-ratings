@@ -30,6 +30,8 @@ class AddRatingView(object):
             'score': score,
         })
         ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
+        if isinstance(ip, list):
+            ip = ip[0]
         had_voted = bool(field.get_rating_for_user(request.user, ip, request.COOKIES))
         
         context['had_voted'] = had_voted
