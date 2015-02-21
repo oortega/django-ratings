@@ -13,7 +13,7 @@ class AddRatingView(object):
         Adds a vote to the specified model field."""
         
         try:
-            instance = self.get_instance(content_type_id, object_id)
+            instance = self.get_insistance(content_type_id, object_id)
         except ObjectDoesNotExist:
             raise Http404('Object does not exist')
         
@@ -30,8 +30,8 @@ class AddRatingView(object):
             'score': score,
         })
         ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
-        if isinstance(ip, list):
-            ip = ip[0]
+        if len(ip.split(",")) > 1:
+            ip = ip.split(",")[0]
         had_voted = bool(field.get_rating_for_user(request.user, ip, request.COOKIES))
         
         context['had_voted'] = had_voted
