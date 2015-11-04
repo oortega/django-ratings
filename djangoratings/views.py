@@ -13,7 +13,7 @@ class AddRatingView(object):
         Adds a vote to the specified model field."""
         
         try:
-            instance = self.get_insistance(content_type_id, object_id)
+            instance = self.get_instance(content_type_id, object_id)
         except ObjectDoesNotExist:
             raise Http404('Object does not exist')
         
