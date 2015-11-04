@@ -12,20 +12,21 @@ except ImportError:
 
 from managers import VoteManager, SimilarUserManager
 
+
 class Vote(models.Model):
-    content_type    = models.ForeignKey(ContentType, related_name="votes")
-    object_id       = models.PositiveIntegerField()
-    key             = models.CharField(max_length=32)
-    score           = models.IntegerField()
-    user            = models.ForeignKey(User, blank=True, null=True, related_name="votes")
-    ip_address      = models.IPAddressField()
-    cookie          = models.CharField(max_length=32, blank=True, null=True)
-    date_added      = models.DateTimeField(default=now, editable=False)
-    date_changed    = models.DateTimeField(default=now, editable=False)
+    content_type = models.ForeignKey(ContentType, related_name="votes")
+    object_id = models.PositiveIntegerField()
+    key = models.CharField(max_length=32)
+    score = models.IntegerField()
+    user = models.ForeignKey(User, blank=True, null=True, related_name="votes")
+    ip_address = models.GenericIPAddressField()
+    cookie = models.CharField(max_length=32, blank=True, null=True)
+    date_added = models.DateTimeField(default=now, editable=False)
+    date_changed = models.DateTimeField(default=now, editable=False)
 
-    objects         = VoteManager()
+    objects = VoteManager()
 
-    content_object  = generic.GenericForeignKey()
+    content_object = generic.GenericForeignKey()
 
     class Meta:
         unique_together = (('content_type', 'object_id', 'key', 'user', 'ip_address', 'cookie'))
