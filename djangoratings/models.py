@@ -30,7 +30,7 @@ class Vote(models.Model):
 
     objects         = VoteManager()
 
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
 
     class Meta:
         unique_together = (('content_type', 'object_id', 'key', 'user', 'ip_address', 'cookie'))
@@ -61,7 +61,7 @@ class Score(models.Model):
     score           = models.IntegerField()
     votes           = models.PositiveIntegerField()
     
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
 
     class Meta:
         unique_together = (('content_type', 'object_id', 'key'),)
@@ -89,7 +89,7 @@ class IgnoredObject(models.Model):
     content_type    = models.ForeignKey(ContentType)
     object_id       = models.PositiveIntegerField()
     
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
     
     class Meta:
         unique_together = (('content_type', 'object_id'),)
