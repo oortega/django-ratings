@@ -2,8 +2,13 @@ from datetime import datetime
 
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
+import django
+if (hasattr(django,"version") and django.version > 1.8) or (hasattr(django,"get_version") and django.get_version()):
+    from django.contrib.contenttypes.fields import GenericForeignKey
+else:
+    from django.contrib.contenttypes.generic import GenericForeignKey
+    
 
 try:
     from django.utils.timezone import now
@@ -20,13 +25,13 @@ class Vote(models.Model):
     score = models.IntegerField()
     user = models.ForeignKey(User, blank=True, null=True, related_name="votes")
     ip_address = models.GenericIPAddressField()
+    ip_address      = models.GenericIPAddressField() if hasattr(models,"GenericIPAddressField") else models.IPAddressField() 
     cookie = models.CharField(max_length=32, blank=True, null=True)
     date_added = models.DateTimeField(default=now, editable=False)
     date_changed = models.DateTimeField(default=now, editable=False)
-
     objects = VoteManager()
 
-    content_object = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
 
     class Meta:
         unique_together = (('content_type', 'object_id', 'key', 'user', 'ip_address', 'cookie'))
@@ -57,7 +62,7 @@ class Score(models.Model):
     score           = models.IntegerField()
     votes           = models.PositiveIntegerField()
     
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
 
     class Meta:
         unique_together = (('content_type', 'object_id', 'key'),)
@@ -85,7 +90,7 @@ class IgnoredObject(models.Model):
     content_type    = models.ForeignKey(ContentType)
     object_id       = models.PositiveIntegerField()
     
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
     
     class Meta:
         unique_together = (('content_type', 'object_id'),)
